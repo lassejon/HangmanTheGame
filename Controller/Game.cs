@@ -6,7 +6,7 @@ namespace Controller
 {
     public class Game
     {
-        private Serializer Serializor { get; set; }
+        private Serializer Serializer { get; set; }
         public string Word { get; private set; }
         public string HiddenWord { get; private set; }
         public List<char> IncorrectGuesses { get; private set; }
@@ -16,7 +16,7 @@ namespace Controller
 
         public Game()
         {
-            Serializor = new Serializer();
+            Serializer = new Serializer();
             Random = new Random();
             Word = InitialiseWord();
             HiddenWord = InitialiseHiddenWord();
@@ -53,7 +53,7 @@ namespace Controller
         
         private string RandomWord()
         {
-            var words = Serializor.ReadWords();
+            var words = Serializer.ReadWords();
             var randomIndex = Random.Next(words.Length);
             var randomWord = words[randomIndex];
 
