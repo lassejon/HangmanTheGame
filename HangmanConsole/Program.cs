@@ -7,8 +7,9 @@ namespace HangmanConsole
     {
         private static void Main(string[] args)
         {
-            var game = new Game();
-            game.Play();
+            var game = new GameConsole();
+            
+            game.PlayGame();
         }
     }
 }

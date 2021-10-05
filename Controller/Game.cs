@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Controller
 {
@@ -10,7 +9,7 @@ namespace Controller
         public string Word { get; private set; }
         public string HiddenWord { get; private set; }
         public List<char> IncorrectGuesses { get; private set; }
-        public int IncorrectGuessesCount { get; private set; }
+        public int IncorrectGuessesLeft { get; private set; }
         
         private Random Random { get;  set; }
 
@@ -21,18 +20,18 @@ namespace Controller
             Word = InitialiseWord();
             HiddenWord = InitialiseHiddenWord();
             IncorrectGuesses = new List<char>();
-            IncorrectGuessesCount = 0;
+            IncorrectGuessesLeft = 12;
         }
 
         private string InitialiseHiddenWord()
         {
-            var hiddenWordToGuess = "";
+            var hiddenWord = "";
             for (var i = 0; i < Word.Length; i++)
             {
-                hiddenWordToGuess += "_";
+                hiddenWord += "_";
             }
 
-            return hiddenWordToGuess;
+            return hiddenWord;
         }
 
         private string UpdateHiddenWord(char guess)
@@ -78,107 +77,26 @@ namespace Controller
 
         public bool IsLoss()
         {
-            return IncorrectGuessesCount >= 12;
+            return IncorrectGuessesLeft <= 0;
         }
 
         public void MakeGuess(char guess)
         {
-            IncorrectGuessesCount++;
             guess = char.ToLower(guess);
             if (IsCorrectGuess(guess))
             {
                 HiddenWord = UpdateHiddenWord(guess);
-                return;
             }
-
-            // if (IsWin())
-            // {
-            //     Console.WriteLine("WIN! WIN! WIN! WIN! WIN! WIN! WIN! WIN!");
-            // }
-            //
-            // if (IsLoss())
-            // {
-            //     Console.WriteLine("Loss! Loss! Loss! Loss! Loss! Loss! Loss!");
-            // }
-            
-            IncorrectGuesses.Add(guess);
+            else
+            {
+                IncorrectGuessesLeft--;
+                IncorrectGuesses.Add(guess);
+            }
         }
 
-        public void Play()
+        public bool IsValidGuess(char guess)
         {
-            Console.WriteLine(Word);
-            Console.WriteLine(HiddenWord);
-
-            var guessA = 'a';
-            var guessM = 'b';
-            var guessI = 'I';
-            var guessW = 'g';
-            var guesssO = 'o';
-            var guessE = 'E';
-            var guessY = 'y';
-            var guessD = 'd';
-            var guessK = 'r';
-            var guessL = 'l';
-            var guessZ = 's';
-            var guesssC = 't';
-            var guessU = 'U';
-            var guessJ = 'C';
-            
-            MakeGuess(guessA);
-            Console.WriteLine(HiddenWord);
-            Console.WriteLine(string.Join(", ", IncorrectGuesses));
-            
-            MakeGuess(guessM);
-            Console.WriteLine(HiddenWord);
-            Console.WriteLine(string.Join(", ", IncorrectGuesses));
-            
-            MakeGuess(guessI);
-            Console.WriteLine(HiddenWord);
-            Console.WriteLine(string.Join(", ", IncorrectGuesses));
-            
-            MakeGuess(guessW);
-            Console.WriteLine(HiddenWord);
-            Console.WriteLine(string.Join(", ", IncorrectGuesses));
-            
-            MakeGuess(guesssO);
-            Console.WriteLine(HiddenWord);
-            Console.WriteLine(string.Join(", ", IncorrectGuesses));
-            
-            MakeGuess(guessE);
-            Console.WriteLine(HiddenWord);
-            Console.WriteLine(string.Join(", ", IncorrectGuesses));
-            
-            MakeGuess(guessY);
-            Console.WriteLine(HiddenWord);
-            Console.WriteLine(string.Join(", ", IncorrectGuesses));
-            
-            MakeGuess(guessD);
-            Console.WriteLine(HiddenWord);
-            Console.WriteLine(string.Join(", ", IncorrectGuesses));
-            
-            MakeGuess(guessK);
-            Console.WriteLine(HiddenWord);
-            Console.WriteLine(string.Join(", ", IncorrectGuesses));
-            
-            MakeGuess(guessL);
-            Console.WriteLine(HiddenWord);
-            Console.WriteLine(string.Join(", ", IncorrectGuesses));
-            
-            MakeGuess(guessZ);
-            Console.WriteLine(HiddenWord);
-            Console.WriteLine(string.Join(", ", IncorrectGuesses));
-            
-            MakeGuess(guesssC);
-            Console.WriteLine(HiddenWord);
-            Console.WriteLine(string.Join(", ", IncorrectGuesses));
-            
-            MakeGuess(guessU);
-            Console.WriteLine(HiddenWord);
-            Console.WriteLine(string.Join(", ", IncorrectGuesses));
-            
-            MakeGuess(guessJ);
-            Console.WriteLine(HiddenWord);
-            Console.WriteLine(string.Join(", ", IncorrectGuesses));
+            return !IncorrectGuesses.Contains(guess) && !HiddenWord.Contains(guess);
         }
     }
 }
