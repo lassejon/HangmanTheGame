@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Controller
 {
@@ -92,6 +93,25 @@ namespace Controller
                 IncorrectGuessesLeft--;
                 IncorrectGuesses.Add(guess);
             }
+        }
+
+        public List<string[]> GetSaved()
+        {
+            return Serializer.ReadSavedGames();
+        }
+
+        public void Load(string word, string hiddenWord, string incorrectGuessesLeft, string incorrectGuesses)
+        {
+            Word = word;
+            HiddenWord = hiddenWord;
+            IncorrectGuessesLeft = int.Parse(incorrectGuessesLeft);
+            IncorrectGuesses = incorrectGuesses.Split(",").ToList().Select(char.Parse).ToList();
+        }
+
+        public void Save()
+        {
+            var game = $"{Word};{HiddenWord};{IncorrectGuessesLeft};{string.Join(",", IncorrectGuesses)}";
+            Serializer.WriteGame(game);
         }
 
         public bool IsValidGuess(char guess)
